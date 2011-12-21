@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package Frames;
 
@@ -27,7 +23,7 @@ import ru.interpreter.universal.ripsoft.quest.Outgoing;
 
 /**
  *
- * @author Администратор
+ * @author ~jo-MA-jo~
  */
 public class StartJFrame extends JFrame implements IOut, IOut_cls{
   private TextPanel textPanel;

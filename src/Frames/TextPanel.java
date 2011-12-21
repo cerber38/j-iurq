@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package Frames;
 
@@ -11,7 +7,7 @@ import javax.swing.JTextPane;
 
 /**
  *
- * @author Администратор
+ * @author ~jo-MA-jo~
  */
 public class TextPanel extends JScrollPane{
     private JTextPane textPane=new JTextPane();

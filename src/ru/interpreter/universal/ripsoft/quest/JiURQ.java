@@ -17,7 +17,7 @@ import ru.interpreter.universal.ripsoft.quest.operators.BuilderOperators;
 
 /**
  *
- * @author Администратор
+ * @author ~jo-MA-jo~
  */
 public class JiURQ {
     private List<String> listQst = new ArrayList<String>();

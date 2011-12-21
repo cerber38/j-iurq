@@ -1,13 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package Frames;
 
+
+
 import javax.swing.JButton;
 
-
+/**
+ *
+ * @author ~jo-MA-jo~
+ */
 public class Button extends JButton
 {
   private static final long serialVersionUID = 1L;
