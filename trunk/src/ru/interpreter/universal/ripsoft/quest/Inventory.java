@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author Администратор
+ * @author ~jo-MA-jo~
  */
 public class Inventory {
     private LinkedHashMap<String,Integer> inventory;

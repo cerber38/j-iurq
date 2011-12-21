@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package Frames;
 
@@ -14,7 +11,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Администратор
+ * @author ~jo-MA-jo~
  */
 public class InventoryPanel extends JPanel{
     private List listInventory;
