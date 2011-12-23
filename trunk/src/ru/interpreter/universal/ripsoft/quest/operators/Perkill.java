@@ -2,7 +2,6 @@
 package ru.interpreter.universal.ripsoft.quest.operators;
 
 import ru.interpreter.universal.ripsoft.quest.IOperator;
-import ru.interpreter.universal.ripsoft.quest.Location;
 import ru.interpreter.universal.ripsoft.quest.Parser;
 
 /**
@@ -19,22 +18,14 @@ public class Perkill implements IOperator {
         return ops;
     }
 
-    public void parse(Parser p, Location l, int n_str, int n_stance, int e_stance) {
-//        String inv= l.location.get(n_str).toLowerCase().trim();
-//         if(inv.indexOf(" ")==-1)
-            String str = l.location.get(n_str);
-            int size = str.length();
+    public void parse(Parser p, int n_str, int n_stance, int e_stance) {
             p.getCore().getVariables().clear();
-//         else{
-//             String o = inv.split(" ")[1].trim();
-//            p.getCore().(o);
-//         }
-
+            int size = p.getStringQest(n_str).length();
             if (e_stance+1<size)
-                 p.parse(l, n_str, e_stance+1);
+                 p.parse(n_str, e_stance+1);
             else
-                if (n_str+1<l.location.size())
-                 p.parse(l, n_str+1);
+                if (n_str+1<p.getCore().getListQest().size())
+                 p.parse(n_str+1);
 
     }
 

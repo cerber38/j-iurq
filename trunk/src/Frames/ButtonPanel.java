@@ -13,15 +13,15 @@ public class ButtonPanel extends JPanel
 {
   private ButtonListener butListener;
   private GridLayout buttonPanelLayout;
-  private StartJFrame paramGui;
+  private StartJFrame core;
 
 
-  public ButtonPanel(StartJFrame paramGui)
+  public ButtonPanel(StartJFrame core)
   {
-      this.paramGui = paramGui;
+      this.core = core;
       buttonPanelLayout = new GridLayout(5, 5, 2, 2);
       setLayout(buttonPanelLayout);
-      butListener = new ButtonListener(paramGui);
+      butListener = new ButtonListener(core);
   }
 
 

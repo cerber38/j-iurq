@@ -2,7 +2,6 @@
 package ru.interpreter.universal.ripsoft.quest.operators;
 
 import ru.interpreter.universal.ripsoft.quest.IOperator;
-import ru.interpreter.universal.ripsoft.quest.Location;
 import ru.interpreter.universal.ripsoft.quest.Parser;
 
 /**
@@ -19,9 +18,8 @@ public class GoTo implements IOperator {
         return ops;
     }
 
-    public void parse(Parser p, Location l, int n_str, int n_stance, int e_stance) {
-        String str = l.location.get(n_str);
-        str=str.substring(n_stance, e_stance);
+    public void parse(Parser p, int n_str, int n_stance, int e_stance) {
+        String str = p.getStringQest(n_str, n_stance, e_stance);
         parse(p, str);
 
     }

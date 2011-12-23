@@ -31,18 +31,23 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
   private ButtonPanel buttonPanel;
   private JiURQ c;
   private Panel panelButtons;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JMenuItem restartMenuItem;
+    
 
 
   public StartJFrame (){
     initComponents();
     setLocationRelativeTo(null);
     setVisible(true);
+
   }
+
+  
 
   private void initComponents() {
 
@@ -51,14 +56,15 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
         panelButtons = new java.awt.Panel();
         buttonPanel = new ButtonPanel(this);
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuBar = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        openMenuItem = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        aboutMenuItem = new javax.swing.JMenuItem();
+        restartMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+       // setResizable(false);
         setLocationByPlatform(true);
 
         GroupLayout panelButtonsLayout = new GroupLayout(panelButtons);
@@ -74,17 +80,26 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
              .addComponent(buttonPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Файл");
-        jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Открыть");
-        jMenuItem1.addActionListener(new ActionListener() {
+        fileMenu.setText("Файл");
+        openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+        openMenuItem.setText("Открыть");
+        openMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 c.openDialog();
             }
         });
-        jMenu1.add(jMenuItem1);
-        jMenuBar1.add(jMenu1);
-        jMenu2.setText("?");
+        restartMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+        restartMenuItem.setText("Рестарт");
+        restartMenuItem.setEnabled(false);
+        restartMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                c.restartQest();
+            }
+        });
+        fileMenu.add(openMenuItem);
+        fileMenu.add(restartMenuItem);
+        jMenuBar.add(fileMenu);
+        helpMenu.setText("?");
 //        jMenu2.addActionListener(new ActionListener() {
 //            public void actionPerformed(ActionEvent evt) {
 //                System.out.println("About");
@@ -92,17 +107,17 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
 //
 //            }
 //        });
-        jMenuItem2.setText("О программе...");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        aboutMenuItem.setText("О программе...");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AboutActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        helpMenu.add(aboutMenuItem);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar.add(helpMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,14 +135,14 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(inventoryPanel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textPanel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(inventoryPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -147,13 +162,18 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
       public JiURQ getCore() {
         return c;
 
-      }
+     }
       public void start(String[] args) {
         c =new JiURQ(this,this);
         setTitle("Java interpreter Universal Ripsoft Quest (JiURQ) v"+c.getVersion());
-        if (args[0].isEmpty())return;
+         String s = "";
+        try{
+         s = args[0];
+        }catch(Exception ex){}
+        if (s.isEmpty())return;
         c.loadQest(args[0]);
         c.strartQest();
+      //  restartMenuItem.setEnabled(true);
 
       }
 
@@ -179,6 +199,7 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
 
       public void onOutgoing(Outgoing content) {
                     String s="";
+                    restartMenuItem.setEnabled(true);
         for(String str : content.getText()){
             addText(str);
         }
@@ -191,6 +212,8 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
         }
         inventoryPanel.refresh(content.getInventory());
         }
+
+
 
 
 }

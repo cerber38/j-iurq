@@ -64,11 +64,9 @@ public class Outgoing {
     }
 
     public LinkedHashMap<String,Integer> getInventory (){
-
         return p.getCore().getInventory().getCleanInventoryHash();
     }
 
-  
- 
+
 
 }

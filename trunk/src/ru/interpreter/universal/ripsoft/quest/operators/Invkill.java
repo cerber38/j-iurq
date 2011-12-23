@@ -2,7 +2,6 @@
 package ru.interpreter.universal.ripsoft.quest.operators;
 
 import ru.interpreter.universal.ripsoft.quest.IOperator;
-import ru.interpreter.universal.ripsoft.quest.Location;
 import ru.interpreter.universal.ripsoft.quest.Parser;
 
 /**
@@ -19,9 +18,9 @@ public class Invkill implements IOperator {
         return ops;
     }
 
-    public void parse(Parser p, Location l, int n_str, int n_stance, int e_stance) {
-        String inv= l.location.get(n_str).toLowerCase().trim();
-        int size = inv.length();
+    public void parse(Parser p, int n_str, int n_stance, int e_stance) {
+        String inv = p.getStringQest(n_str, n_stance, e_stance);
+        int size = p.getStringQest(n_str).length();
         inv=inv.substring(n_stance, e_stance);
          if(inv.indexOf(" ")==-1)
             p.getCore().getInventory().clear();
@@ -30,11 +29,11 @@ public class Invkill implements IOperator {
             p.getCore().getInventory().remove(o);
          }
             if (e_stance+1<size)
-                 p.parse(l, n_str, e_stance+1);
+                 p.parse(n_str, e_stance+1);
             else
-                if (n_str+1<l.location.size())
-                 p.parse(l, n_str+1);
-    }
+                if (n_str+1<p.getCore().getListQest().size())
+                 p.parse(n_str+1);
+     }
 
 
     public boolean parse(Parser p, String str) {

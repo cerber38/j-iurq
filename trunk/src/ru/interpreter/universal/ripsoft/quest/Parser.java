@@ -85,6 +85,18 @@ public class Parser {
             out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
             out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
            }
+           int n = out.indexOf("#");
+           int k = out.indexOf("$");
+ 
+        while(k>=0&&n>=0){
+         //             System.out.println("n: "+n+" k: "+k+"  "+out.substring(n, k+1));
+         //             System.out.println(out);
+           String bad = out.substring(n, k+1);
+           out = out.replace(bad, " 0 ");
+           getCore().getVariables().addVariable(bad.replace("#", "").replace("%", "").replace("$", ""), "0");
+           n = out.indexOf("#");
+           k = out.indexOf("$");
+        }
  //       System.out.println("replaceVariableValue(String in): "+out);
         return out;
     }
@@ -183,10 +195,11 @@ public class Parser {
                 t+=w+" ";
                 if (i+1==words.length)
                    out+= getValue(t);
-             //  System.out.println("if (h.containsKey(w)||isNum(w)): "+t);
+            //   System.out.println("getValue(t): "+t+" out= "+out);
             }else
                 if (!t.isEmpty()){
                    out+= getValue(t)+" "+w+" ";
+        //    System.out.println("getValue(t): "+t+" out= "+out);
                 t = "";
               //  System.out.println("out+= getValue(t);: "+out);
                 }else
@@ -204,6 +217,7 @@ public class Parser {
 
     public String getValue(String in){
     //    System.out.println("getValue: "+in);
+        if (in.indexOf("/ 0")>=0||in.indexOf("/0")>=0)return "0";
         try{
             Interpreter bsh = getIValue(in);
             if (bsh!=null){
@@ -218,6 +232,7 @@ public class Parser {
     }
 
     public Interpreter getIValue(String in){
+        System.out.println("getIValue: "+in);
         String condition = in;
         Interpreter bsh = new Interpreter();
         String out = "";
@@ -255,6 +270,20 @@ public class Parser {
         return bsh;
     }
 
+    public String getStringQest(int n_str){
+        return c.getListQest().get(n_str);
+    }
+
+    public String getStringQest(int n_str, int n_stance){
+        String str = getStringQest(n_str);
+        return str.substring(n_stance, str.length());
+    }
+
+    public String getStringQest(int n_str, int n_stance, int e_stance){
+        String str = getStringQest(n_str);
+        return str.substring(n_stance, e_stance);
+    }
+
     public void parse (String str){
          for (String[]o: c.getOperators().keySet()){
              if (operTest(o,str)){
@@ -265,19 +294,35 @@ public class Parser {
          }
     }
 
-    public void parse (Location l, int n_str){
-        parse (l, n_str, 0, l.location.get(n_str).length());
+    /**
+     * парсер
+     * @param n_str номер строки
+     */
+    public void parse (int n_str){
+        parse (n_str, 0, 0);
     }
 
-    public void parse (Location l, int n_str, int n_stance){
-        parse (l, n_str, n_stance, l.location.get(n_str).length());
+    /**
+     * парсер
+     * @param n_str номер строки
+     * @param n_stance индекс начала текста в строке
+     */
+    public void parse (int n_str, int n_stance){
+        parse (n_str, n_stance, 0);
     }
 
-    public void parse (Location l, int n_str, int n_stance, int e_stance){
-        String str =l.location.get(n_str);
+    /**
+     * парсер
+     * @param n_str номер строки
+     * @param n_stance индекс начала текста в строке
+     * @param e_stance индекс конца текста в строке
+     */
+    public void parse (int n_str, int n_stance, int e_stance){
+        String str = getStringQest(n_str);
+        if (e_stance==0)e_stance = str.length();
          for (String[]o: c.getOperators().keySet()){
              if (operTest(o,str)){
-                 c.getOperators().get(o).parse(this, l, n_str, n_stance, e_stance);
+                 c.getOperators().get(o).parse(this, n_str, n_stance, e_stance);
                  break;
              }
 
@@ -300,12 +345,15 @@ public class Parser {
    public boolean isNum(String in){
      try{
          Integer.valueOf(in.trim());
+        //  System.out.println("isNum: "+in+" true");
          return true;
          }catch(Exception ex){
          try{
              Double.valueOf(in.trim());
+         //    System.out.println("isNum: "+in+" true");
              return true;
              }catch(Exception exx){
+         //   System.out.println("isNum: "+in+" false");
              return false;
              }
          }
@@ -340,167 +388,5 @@ public class Parser {
          return Math.round(d*dd)/dd;
     }
 
-//
-//    public String getClearString(String in){
-//         in=parseRnd(in);
-//         String out = in;
-//     try{
-//
-//         String out3 = "";
-//         String bad = in;
-//
-//         // for (String ss: in.trim().split(" ")){
-//              for (String s: h.keySet()){
-//              //  out = out.replace(ss, ss.replace(s, h.get(s)));
-//                  out = out.replace(s, h.get(s));
-//              }
-//           //   out = out.replace("  ", " ");
-//       //     }
-//      //    System.out.println("Clear out: "+out);
-//          bad = out;
-//          out = "";
-//        //  for (String ss: out.trim().split(" ")){
-//            HashMap<String,String> hm = getCore().getVariables().getVariablesHash();
-//            LinkedHashMap<String,Integer> lhm = getCore().getInventory().getInventoryHash();
-//            for (String v:hm.keySet()){
-//               bad = bad.replace(v, v.replace(" ", "_"));
-//            }
-//            for (String inv:lhm.keySet()){
-//               bad = bad.replace(inv, inv.replace(" ", "_"));
-//            }
-//            String test = bad.trim();
-//        //    System.out.println("Clear bad: "+bad);
-//            boolean b = true;
-//            String last ="";
-//            String out2 = "";
-//            String[] s = bad.trim().split(" ");
-//            for (int i = 0; i<s.length; i++){
-//                 String ss = s[i];
-//                 if (ss.isEmpty()) continue;
-//                 if (!s[i].equals("-")&&h.containsKey(s[i])){
-//                 if (!s[i].equals("(")&& out2.isEmpty()&&!last.isEmpty())out=last;
-//               //  if (!s[i].equals("(")||!s[i].equals(")"))
-//                 out2 += out2.isEmpty() ? s[i-1]+" "+s[i] : " "+s[i];
-//        //         System.out.println("out: "+out);
-//                 }else
-//                if (isNum(ss)||
-//                        (!hm.containsKey(ss.trim())&&
-//                        hm.containsKey(ss.replace("_", " ").replace("#%", "").replace("#", "").replace("$", "").trim()))||
-//                        (!lhm.containsKey(ss.trim())&&
-//                        lhm.containsKey(ss.replace("inv_", "").replace("_", " ").replace("#%", "").replace("#", "").replace("$", "").trim()))){
-//                    out2 += " "+ss;
-//                }else
-//                     if(!out2.isEmpty()){
-//            //              System.out.println("Clear out2: "+out2);
-//
-//                          out3 = "";
-//                      try {
-//                          out3 = getValue(out2).get("out").toString();
-//                      } catch (Exception ex) {}
-//                          out3 = out3.isEmpty() ? out2+" "+ss : out3+" "+ss;
-//                          out2 = "";
-//                          last = out;
-//                          out+= " "+out3;
-//                    }else{
-//                    last = out;
-//                    out+= " "+ss;
-//                    }
-//            }
-//            if (test.equals(out.trim()))return in;
-//       } catch (Exception ex) {return in;};
-//           // System.out.println("Clear out: "+out);
-//        return out.trim();
-//    }
-
-
-
-
-
-
-
-
-
-//     public Interpreter getValue(String in){
-//         return getValue(new Interpreter(),in);
-//     }
-//
-//     public Interpreter getValue(Interpreter bsh, String in){
-//       //String out = getVariableValue(in);
-//          String condition = getVariableValue(in).replace("&", "&&");
-//
-//          condition = condition.replace("and", "&&");
-//          condition = condition.replace("or", "||");
-//          condition = condition.replace("not", "");
-//          condition = condition.replace("=", "==");
-//          condition = condition.replace("<>", "!=");
-//          String temp = getVar(condition);
-//
-//       try {
-//
-//            HashMap<String,String> hm = getCore().getVariables().getVariablesHash();
-//            LinkedHashMap<String,Integer> lhm = getCore().getInventory().getInventoryHash();
-//
-//            for (String v:hm.keySet()){
-//               try{
-//                   int i = Integer.parseInt(hm.get(v));
-//                   bsh.set(v, i);
-//                } catch (Exception ex) {
-//                   bsh.set(v, hm.get(v));
-//                }
-//            }
-//
-//           for (String inv:lhm.keySet()){
-//                  String s ="inv_"+inv.replace(" ", "_");
-//                  bsh.set(s, lhm.get(inv));
-//                  condition = condition.replace("inv_"+inv, s);
-//             //     System.out.println("load inventory: "+s+" = "+lhm.get(inv));
-//
-//           }
-//           String[] t = temp.split(";");
-//           for (String ss :t){
-//               String[] tt = ss.split("=");
-//              for (String s :tt){
-//                   String v = s.trim();
-//                   if (!lhm.containsKey(v.replace("inv_", ""))&&!hm.containsKey(v)&&v.indexOf(String.valueOf('"')+"+ ")==-1)
-//                      try{
-//                        Integer.valueOf(v);
-//                      }catch(Exception ex){
-////                        bsh.set(v.split(" ")[0].trim(), 0);
-////                        getCore().getVariables().addVariable(v.split(" ")[0].trim(), "0");
-//                        bsh.set(v, 0);
-//                        getCore().getVariables().addVariable(v, "0");
-//                        System.out.println("Add: "+v);
-//                      }
-//               }
-//           }
-//
-//            System.out.println("bsh.eval: out = "+condition+" ;");
-//             bsh.eval("try{\n"
-//                    + "out = "+condition+" ;\n"
-//                    + "} catch (Exception ex) {\n"
-//                    + "}");
-//
-//        } catch (Exception ex1) {
-//            return null;
-//        }
-//        return bsh;
-//    }
-//
-//    private String getVar(String condition){
-//          condition = condition.replace("&&", ";");
-//          condition = condition.replace("||", ";");
-//          condition = condition.replace("==", "=");
-//          condition = condition.replace("!=", "=");
-//          condition = condition.replace("<=", "=");
-//          condition = condition.replace(">=", "=");
-//          condition = condition.replace(">", "=");
-//          condition = condition.replace("<", "=");
-//       return condition;
-//    }
-
-
-
-   
- 
 
 }
