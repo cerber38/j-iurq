@@ -9,7 +9,7 @@ package ru.interpreter.universal.ripsoft.quest;
 public interface IOperator {
 
     public String[] getNames();
-    public void parse(Parser p, Location l, int n_str, int n_stance, int e_stance);
+    public void parse(Parser p, int n_str, int n_stance, int e_stance);
     public boolean parse(Parser p, String str);
 
 }

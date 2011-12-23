@@ -3,7 +3,6 @@ package ru.interpreter.universal.ripsoft.quest.operators;
 
 import ru.interpreter.universal.ripsoft.quest.ExProc;
 import ru.interpreter.universal.ripsoft.quest.IOperator;
-import ru.interpreter.universal.ripsoft.quest.Location;
 import ru.interpreter.universal.ripsoft.quest.Outgoing;
 import ru.interpreter.universal.ripsoft.quest.Parser;
 
@@ -21,7 +20,7 @@ public class End implements IOperator {
         return ops;
     }
 
-    public void parse(Parser p, Location l, int n_str, int n_stance, int e_stance) {
+    public void parse(Parser p, int n_str, int n_stance, int e_stance) {
         parse(p, "");
     }
 
@@ -32,7 +31,7 @@ public class End implements IOperator {
         }else{
             ExProc ep = p.getCore().getLastProc();
             p.getCore().delLastProc();
-            p.parse(ep.l,ep.n_str,ep.n_stance);
+            p.parse(ep.n_str,ep.n_stance);
         }
 
         return true;

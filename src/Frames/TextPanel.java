@@ -17,6 +17,7 @@ public class TextPanel extends JScrollPane{
         textPane.setBackground(new java.awt.Color(204, 204, 204));
         textPane.setEditable(false);
         textPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        setMaximumSize(this.getMaximumSize());
         setViewportView(textPane);
 //
 ////          setLayout(new BorderLayout(1, 1));

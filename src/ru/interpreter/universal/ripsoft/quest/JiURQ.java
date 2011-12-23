@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -20,17 +21,19 @@ import ru.interpreter.universal.ripsoft.quest.operators.BuilderOperators;
  * @author ~jo-MA-jo~
  */
 public class JiURQ {
-    private List<String> listQst = new ArrayList<String>();
-    private static LinkedHashMap<String,Location> location = new LinkedHashMap<String,Location>();
+    private ArrayList<String> listQst = new ArrayList<String>();
+    private HashMap<String,Integer> listLocations = new HashMap<String,Integer>();
     private LinkedHashMap<String[],IOperator> operators = new LinkedHashMap<String[],IOperator>();
-    public static int[] currentLocation;
-    private static Inventory inventory;
-    private static Variables variables;
-    private static Parser parser;
-    private static IOut out;
-    private static IOut_cls out_cls;
-    private static List<ExProc> proc = new ArrayList<ExProc>();
-    private static String version = "0.1a";
+    public int[] currentQest;
+    private Inventory inventory;
+    private Variables variables;
+    private Activity activity;
+    private Parser parser;
+    private IOut out;
+    private IOut_cls out_cls;
+    private List<ExProc> proc = new ArrayList<ExProc>();
+    private String version = "0.2b";
+
 
 
     public JiURQ (IOut out, IOut_cls out_cls){
@@ -38,7 +41,8 @@ public class JiURQ {
      parser = new Parser(this);
      inventory = new Inventory();
      variables = new Variables();
-     currentLocation = new int[]{0,0};
+     activity = new Activity();
+     currentQest = new int[]{0,0};
      this.out=out;
      this.out_cls=out_cls;
     }
@@ -116,9 +120,16 @@ public class JiURQ {
         parser.getOutgoing().getButtons().get(i).onClick();
     }
 
-
     public Variables getVariables(){
         return variables;
+    }
+
+    public Activity getActivity(){
+        return activity;
+    }
+
+    public void ActivityOnClick(String use){
+        parser.parse(use);
     }
 
     public Inventory getInventory(){
@@ -129,26 +140,31 @@ public class JiURQ {
         return operators;
     }
 
-    public LinkedHashMap<String,Location> getLocation(){
-        return location;
+    public HashMap<String,Integer> getListLocations(){
+        return listLocations;
+    }
+
+    public List<String> getListQest(){
+        return listQst;
     }
 
     public void strartQest() {
-        Location l= location.get(listQst.get(currentLocation[0]));
-        parser.parse(l, currentLocation[1]);
+      //  Location l= location.get(listQst.get(currentQest[0]));
+        parser.parse(currentQest[0]);
     }
 
     public void stopQest() {
      listQst.clear();
-     location.clear();
+     listLocations.clear();
      inventory.clear();
      variables.clear();
      proc.clear();
      parser.clsOutButton();
      parser.clearOutgoing();
      getOut_cls().cls();
+     activity.clear();
   //   parser = new Parser(this);
-     currentLocation = new int[]{0,0};
+     currentQest = new int[]{0,0};
 
     }
 
@@ -161,7 +177,7 @@ public class JiURQ {
          parser.clearOutgoing();
          getOut_cls().cls();
       //   parser = new Parser(this);
-         currentLocation = new int[]{0,0};
+         currentQest = new int[]{0,0};
          strartQest();
          return true;
         }
@@ -188,40 +204,46 @@ public class JiURQ {
     }
 
     /**
-     * Загружает квест из файла
+     * Загружает квест
      * @param fname
      */
     public void loadQest(String fname) {
         try {
-           // BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
+           int i=-1;
+
             String nameLocation ="";
-        //    while (r.ready()){
-             // String str = r.readLine();
-              for (String str :getQest(fname).split("<BR>")){
+            String[]content =getQest(fname).split("<BR>");
+              for (String str :content){
               if(!str.trim().toLowerCase().startsWith("if")){
                 for (String s:str.split("&")){
                     s=s.trim();
                    // System.out.println(s);
+                    if (s.indexOf(";")==0)continue;
                     if (s.indexOf(":")==0){
-                        nameLocation = s.trim().substring(1,s.length()).toLowerCase();
-                        location.put(nameLocation,new Location(nameLocation));
-                        listQst.add(nameLocation);
-                 //      System.out.println("Add new location "+nameLocation);
+                        nameLocation = s.substring(1,s.length()).toLowerCase();
+                        listLocations.put(nameLocation, i+1);
+                        if (s.toLowerCase().startsWith(":use_")) activity.addUse(s.substring(1,s.length()));
                     }else
                     if  (!s.isEmpty()&&!s.equals(" ")&&!s.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
-                        Location l=location.get(nameLocation);
-                        location.put(nameLocation,l.addStringInList(s));
+                        i++;
+                        listQst.add(i,s);
                     }
                 }
               }else{
+                  if (str.indexOf(";")==0)continue;
+                  if (str.indexOf(":")==0){
+                        nameLocation = str.substring(1,str.length()).toLowerCase();
+                        listLocations.put(nameLocation, i+1);
+                        if (str.toLowerCase().startsWith(":use_")) activity.addUse(str.substring(1,str.length()));
+                  }else
                     if  (!str.isEmpty()&&!str.equals(" ")&&!str.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
-                        Location l=location.get(nameLocation);
-                        location.put(nameLocation,l.addStringInList(str));
+                        i++;
+                        listQst.add(i,str);
                     }
               }
             }
-          //   r.close();
-        } catch (Exception ex) {
+              listQst.trimToSize();
+          } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
