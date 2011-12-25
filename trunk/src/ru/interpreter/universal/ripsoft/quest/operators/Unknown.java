@@ -40,17 +40,20 @@ public class Unknown implements IOperator {
         }else
 
         if (s.length==2&&s[0].trim().indexOf(" ")==-1){
+
             String out = "";
-            String t=s[1].trim();
-             p.getCore().getVariables().addVariable(s[0].trim(), "0");
-             t=t.replace(s[0].trim(), "#"+s[0].trim()+"$");
+            String t=p.replaceMatOperators(s[1].trim());
+             System.out.println("parse UNKNOWN : "+str);
+            // p.getCore().getVariables().addVariable(s[0].trim(), "0");
+             p.parseAllUnknownVariables(str);
+           //  t=t.replace(" "+s[0].trim()+" ", " #"+s[0].trim()+"$ ");
             try {
                 out = p.getIValue(t).get("out").toString();//getValue(s[1].trim()).get("out").toString();
             } catch (Exception ex) {}
                 out = out.isEmpty() ? s[1].trim() : out;
             
                 p.getCore().getVariables().addVariable(s[0].trim(), out /*s[1].trim()*/);
- //               System.out.println("Add variable: "+s[0]+" = "+out);
+         //       System.out.println("Add UNKNOWN variable: "+s[0]+" = "+out);
         }else
             System.out.println("!UNKNOWN! operator : "+str);
         return true;

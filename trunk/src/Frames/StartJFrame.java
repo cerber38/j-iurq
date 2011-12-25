@@ -200,9 +200,12 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
       public void onOutgoing(Outgoing content) {
                     String s="";
                     restartMenuItem.setEnabled(true);
-        for(String str : content.getText()){
+           int size = content.getText().size();
+        for(String str : content.getText(true)){
             addText(str);
         }
+        if (size>0)
+            addText("\n-----\n");
             int i=-1;
             this.buttonPanel.removeAll();
             this.buttonPanel.repaint();

@@ -36,6 +36,7 @@ public class Variables {
 //                  variables.put(name, value);
 //                }
 //        }else
+         System.out.println("addVariable: "+name+" = "+value);
         variables.put(name, value);
     }
 

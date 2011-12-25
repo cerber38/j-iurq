@@ -43,29 +43,29 @@ public class Activity {
         return listUse;
     }
 
-    public ArrayList<String[]> getlistInvUse(){
-        ArrayList<String[]> list = new ArrayList<String[]>();
+    public ArrayList<ActionInventory> getlistInvUse(){
+        ArrayList<ActionInventory> list = new ArrayList<ActionInventory>();
       //  if (hide_use)return list;
         for(String s : listUse){
         //    System.out.println("getlistInvUse "+s);
             if(s.toLowerCase().startsWith("use_inv")&&!listHideUse.contains(s)){
                 int i = s.lastIndexOf("_");
                 String name = i>3?s.substring(i+1,s.length()):"Осмотреть";
-                list.add(new String[]{name,s});
+                list.add(new ActionInventory(name,s));
             }
          }
         return list;
     }
 
-    public ArrayList<String[]> getlistUse(String param){
-        ArrayList<String[]> list = new ArrayList<String[]>();
+    public ArrayList<ActionInventory> getlistUse(String param){
+        ArrayList<ActionInventory> list = new ArrayList<ActionInventory>();
       //  if (hide_use)return list;
         for(String s : listUse){
           //   System.out.println("getlistUse "+s);
             if(s.toLowerCase().startsWith("use_"+param.toLowerCase())&&!listHideUse.contains(s)){
                 int i = s.lastIndexOf("_");
                 String name = i>3?s.substring(i+1,s.length()):"Осмотреть";
-                list.add(new String[]{name,s});
+                list.add(new ActionInventory(name,s));
             }
          }
         return list;
@@ -75,6 +75,6 @@ public class Activity {
         listUse.add(label);
      }
 
-  
+
 
 }
