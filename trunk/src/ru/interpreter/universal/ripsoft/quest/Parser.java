@@ -60,21 +60,21 @@ public class Parser {
     public String replaceVariableValue(String in){
         String out = in;
        HashMap<String,String> hm = getCore().getVariables().getVariablesHash();
-//       for (String v:hm.keySet()){
-//            out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
-//            out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
-//
-//            out = out.replace("#"+v+"$", hm.get(v));
-//            out = out.replace("#%"+v+"$", hm.get(v));
-//       }
+       for (String v:hm.keySet()){
+            out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
+            out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
+
+            out = out.replace("#"+v+"$", hm.get(v));
+            out = out.replace("#%"+v+"$", hm.get(v));
+       }
         LinkedHashMap<String,Integer> lhm = getCore().getInventory().getInventoryHash();
-//           for (String inv:lhm.keySet()){
-//            out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-//            out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-//
-//            out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-//            out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-//           }
+           for (String inv:lhm.keySet()){
+            out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+            out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+
+            out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+            out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+           }
            int n = out.indexOf("#");
            int k = out.indexOf("$");
  
@@ -87,22 +87,23 @@ public class Parser {
            try{
              inv_operator = operator.substring(4,operator.length());
            }catch(Exception ex){}
-        //     System.out.println("inv_operator "+inv_operator);
-           if (lhm.containsKey(inv_operator)){
-             out = out.replace(op,String.valueOf(lhm.get(inv_operator)));
-           }else
-           if (hm.containsKey(operator)){
-             out = out.replace(op, hm.get(operator));
-           }else{
+//        //     System.out.println("inv_operator "+inv_operator);
+//           if (lhm.containsKey(inv_operator)){
+//             out = out.replace(op,String.valueOf(lhm.get(inv_operator)));
+//           }else
+//           if (hm.containsKey(operator)){
+//             out = out.replace(op, hm.get(operator));
+//           }else{
             out = out.replace(op, " 0 ");
              if (op.toLowerCase().startsWith("#inv_")||op.toLowerCase().startsWith("#%inv_")){
                getCore().getInventory().addInv(0,inv_operator);
           // getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
              }else
              getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
-           }
+        //   }
            n = out.indexOf("#");
            k = out.indexOf("$");
+           if (n==-1)break;
            System.out.println("replaceVariableValue(String in): "+out);
         }
 
