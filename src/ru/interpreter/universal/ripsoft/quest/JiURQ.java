@@ -33,6 +33,11 @@ public class JiURQ {
     private IOut_cls out_cls;
     private List<ExProc> proc = new ArrayList<ExProc>();
     private String version = "0.2b";
+//    private int returnLoc=-1;
+    private String lastLoc = "";
+    private String thisLoc = "";
+//    private boolean read_only = false;
+    
 
 
 
@@ -46,6 +51,19 @@ public class JiURQ {
      this.out=out;
      this.out_cls=out_cls;
     }
+    
+   public void setLocation(String loc){
+        lastLoc = thisLoc;
+        thisLoc = loc;
+   }
+
+   public String getThisLocation(){
+        return thisLoc;
+   }
+
+   public String getLastLocation(){
+        return lastLoc;
+   }
 
 //    public static class Qest implements IOut{
 //
@@ -124,11 +142,21 @@ public class JiURQ {
         return variables;
     }
 
+//    public boolean readOnly(){
+//        return read_only;
+//    }
+
+//    public void setReadOnly(boolean b){
+//        read_only = b;
+//    }
     public Activity getActivity(){
         return activity;
     }
 
     public void ActivityOnClick(String use){
+      //  parser.clearOutgoing();
+     //   returnLoc=listLocations.get(thisLoc);
+        System.out.println("ActivityOnClick: "+use);
         parser.parse(use);
     }
 
@@ -149,8 +177,9 @@ public class JiURQ {
     }
 
     public void strartQest() {
-      //  Location l= location.get(listQst.get(currentQest[0]));
-        parser.parse(currentQest[0]);
+        setLocation(listQst.get(0));
+        setLocation(listQst.get(0));
+        parser.parse(0);
     }
 
     public void stopQest() {
@@ -212,66 +241,80 @@ public class JiURQ {
            int i=-1;
 
             String nameLocation ="";
-            String[]content =getQest(fname).split("<BR>");
-              for (String str :content){
+//
+//            String[]content =getQest(fname).split("<BR>");
+//
+//              for (String str :content){
+           BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
+            while (r.ready()){
+             String str = r.readLine().replace("#/$", "\n").trim();
+
+            // if (str.startsWith("_")) str ="p "+str.substring(str.indexOf("_")+1, str.length());
               if(!str.trim().toLowerCase().startsWith("if")){
                 for (String s:str.split("&")){
                     s=s.trim();
                    // System.out.println(s);
-                    if (s.indexOf(";")==0)continue;
-                    if (s.indexOf(":")==0){
+                    if (s.startsWith(";"))continue;
+                    if (s.startsWith(":")){
                         nameLocation = s.substring(1,s.length()).toLowerCase();
                         listLocations.put(nameLocation, i+1);
                         if (s.toLowerCase().startsWith(":use_")) activity.addUse(s.substring(1,s.length()));
                     }else
                     if  (!s.isEmpty()&&!s.equals(" ")&&!s.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
-                        i++;
-                        listQst.add(i,s);
+                       if (str.startsWith("_")){
+                            str =listQst.get(i)+str.substring(str.indexOf("_")+1, str.length());
+                            listQst.add(i,str);
+                        }else{
+                          i++;
+                          listQst.add(i,s);
+                        }
                     }
                 }
               }else{
-                  if (str.indexOf(";")==0)continue;
-                  if (str.indexOf(":")==0){
-                        nameLocation = str.substring(1,str.length()).toLowerCase();
-                        listLocations.put(nameLocation, i+1);
-                        if (str.toLowerCase().startsWith(":use_")) activity.addUse(str.substring(1,str.length()));
-                  }else
-                    if  (!str.isEmpty()&&!str.equals(" ")&&!str.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
+//                  if (str.startsWith(";"))continue;
+//                  if (str.startsWith(":")){
+//                        nameLocation = str.substring(1,str.length()).toLowerCase();
+//                        listLocations.put(nameLocation, i+1);
+//                        if (str.toLowerCase().startsWith(":use_")) activity.addUse(str.substring(1,str.length()));
+//                  }else
+                    if (!str.isEmpty()&&!str.equals(" ")&&!str.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
                         i++;
                         listQst.add(i,str);
+              //          }
                     }
               }
             }
+           r.close();
               listQst.trimToSize();
           } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * Загружает квест из файла
-     * @param fname
-     */
-    public String getQest(String fname) {
-         String out ="";
-        try {
-            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
-
-            while (r.ready()){
-              String str = r.readLine().trim();
-              if (str.startsWith("_"))
-                  out +=str.substring(str.indexOf("_")+1, str.length());
-              else
-                  out +="\n<BR>"+str;
-              out = out.replace("#/$", "\n");
-            }
-      //      System.out.println(out);
-             r.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-             return out;
-    }
+//    /**
+//     * Загружает квест из файла
+//     * @param fname
+//     */
+//    public String getQest(String fname) {
+//         String out ="";
+//        try {
+//            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
+//
+//            while (r.ready()){
+//              String str = r.readLine().trim();
+//              if (str.startsWith("_"))
+//                  out +=str.substring(str.indexOf("_")+1, str.length());
+//              else
+//                  out +="\n<BR>"+str;
+//              out = out.replace("#/$", "\n");
+//            }
+//      //      System.out.println(out);
+//             r.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//             return out;
+//    }
 
 
 }

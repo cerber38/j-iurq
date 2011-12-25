@@ -111,7 +111,7 @@ public class If_then_else implements IOperator {
 //        String temp = condition;
         boolean not = condition.toLowerCase().trim().startsWith("not");
         try{
-          condition = p.parseUnknownVariables(p.getString(condition.trim()));
+          condition = p.parseAllUnknownVariables(p.getString(condition.trim()));
           condition = condition.replaceAll("not", "").trim();
            if (condition.indexOf("true")==-1&&condition.indexOf("false")==-1&&
                 condition.indexOf("*")==-1&&condition.indexOf("/")==-1&&

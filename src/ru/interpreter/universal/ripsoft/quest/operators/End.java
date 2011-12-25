@@ -26,7 +26,7 @@ public class End implements IOperator {
 
     public boolean parse(Parser p, String str) {
         if (p.getCore().getLastProc()==null){
-           Outgoing o = p.getOutgoing();
+            Outgoing o = p.getOutgoing();
             p.getCore().getOut().onOutgoing(o);
         }else{
             ExProc ep = p.getCore().getLastProc();

@@ -44,6 +44,12 @@ public class Outgoing {
         return text;
     }
 
+    public List<String> getText (boolean clear){
+        List<String> out = new ArrayList<String>(text);
+        if (clear) text.clear();
+        return out;
+    }
+
     public List<String> getCleanText (int max){
 //        List<String> clean = new ArrayList<String>();
 //        String last ="";

@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import ru.interpreter.universal.ripsoft.quest.ActionInventory;
 
 /**
  *
@@ -101,8 +102,7 @@ public class InventoryPanel extends JPanel implements ActionListener,  PopupMenu
              inventoryHash.add(inv);
         }
         listInventory.setListData(data.toArray());
-
-         this.repaint();
+        this.repaint();
       //  System.out.println(textArea.getHeight());
     }
 
@@ -129,7 +129,7 @@ public class InventoryPanel extends JPanel implements ActionListener,  PopupMenu
            int selectedIndex = listInventory.getSelectedIndex();
 
            System.out.println("listInventory.getSelectedValue() "+selectedIndex);
-           ArrayList<String[]> s=new ArrayList();
+           ArrayList<ActionInventory> s=new ArrayList();
            if (selectedIndex>=0){
                if(selectedIndex==0){
                s = sf.getCore().getActivity().getlistInvUse();
@@ -137,11 +137,11 @@ public class InventoryPanel extends JPanel implements ActionListener,  PopupMenu
                s = sf.getCore().getActivity().getlistUse(inventoryHash.get(selectedIndex));
           }
            paramHash.clear();
-           for(String[] ss :s){
-           JMenuItem menuItem = new JMenuItem(ss[0]);
+           for(ActionInventory ai :s){
+           JMenuItem menuItem = new JMenuItem(ai.getName());
             menuItem.addActionListener(this);
             popupMenu.add(menuItem);
-            paramHash.put(selectedIndex+"_"+ss[0], ss[1]);
+            paramHash.put(selectedIndex+"_"+ai.getName(), ai.getAction());
            }
           if(s.isEmpty()){
             JMenuItem menuItem = new JMenuItem("(пусто...)");

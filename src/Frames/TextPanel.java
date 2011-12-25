@@ -49,7 +49,7 @@ public class TextPanel extends JScrollPane{
 
     public void addText(String param) {
         try {
-            textPane.getDocument().insertString(textPane.getDocument().getLength(), param+"\n---\n", null);
+            textPane.getDocument().insertString(textPane.getDocument().getLength(), param/*+"\n---\n"*/, null);
             textPane.setCaretPosition(textPane.getDocument().getLength());
             //  System.out.println(textArea.getHeight());
         } catch (Exception ex) {
