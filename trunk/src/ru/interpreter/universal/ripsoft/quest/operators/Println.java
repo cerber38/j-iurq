@@ -40,6 +40,7 @@ public class Println implements IOperator {
           //      System.out.println("getClearString(str) "+str);
         }
         p.addOutString(str+"\n");
+        p.getCore().setGo(true);
         return true;
     }
 

@@ -45,6 +45,7 @@ public class Inv_plus implements IOperator {
          }
 
          }
+      p.getCore().setGo(true);
       return true;
     }
 

@@ -35,6 +35,7 @@ public class Cls implements IOperator {
     public boolean parse(Parser p, String str) {
         p.clsOutButton();
         p.getCore().getOut_cls().cls();
+        p.getCore().setGo(true);
       return true;
     }
 

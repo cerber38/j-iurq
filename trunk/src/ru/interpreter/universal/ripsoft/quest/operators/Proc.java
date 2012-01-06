@@ -36,6 +36,7 @@ public class Proc implements IOperator {
         s=p.getString(s);
         System.out.println("Proc: "+s);
         p.parse(s);
+        p.getCore().setGo(true);
         return true;
     }
 

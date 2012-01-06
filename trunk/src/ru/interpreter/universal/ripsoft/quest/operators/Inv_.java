@@ -40,6 +40,7 @@ public class Inv_ implements IOperator {
                     }catch (Exception ex){}
             p.getCore().getInventory().addInv(count, o.split("=")[0].trim().replace("inv_", ""));
         }
+      p.getCore().setGo(true);
       return true;
     }
 

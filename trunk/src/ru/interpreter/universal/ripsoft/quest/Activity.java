@@ -50,7 +50,7 @@ public class Activity {
         //    System.out.println("getlistInvUse "+s);
             if(s.toLowerCase().startsWith("use_inv")&&!listHideUse.contains(s)){
                 int i = s.lastIndexOf("_");
-                String name = i>3?s.substring(i+1,s.length()):"Осмотреть";
+                String name = i>3?s.substring(i+1):"Осмотреть";
                 list.add(new ActionInventory(name,s));
             }
          }
@@ -64,7 +64,8 @@ public class Activity {
           //   System.out.println("getlistUse "+s);
             if(s.toLowerCase().startsWith("use_"+param.toLowerCase())&&!listHideUse.contains(s)){
                 int i = s.lastIndexOf("_");
-                String name = i>3?s.substring(i+1,s.length()):"Осмотреть";
+            //  String name = i>3? s.substring(i+1):"Осмотреть";
+                String name = i>3? s.substring(i+1,i+2).equals(s.substring(i+1,i+2).toUpperCase())? s.substring(i+1):"Осмотреть":"Осмотреть";
                 list.add(new ActionInventory(name,s));
             }
          }

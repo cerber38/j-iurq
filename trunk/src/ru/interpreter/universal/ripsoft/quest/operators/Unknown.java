@@ -36,26 +36,28 @@ public class Unknown implements IOperator {
         if (p.getCore().getListLocations().containsKey(str.trim().toLowerCase())){
            // Location l = p.getCore().getLocation().get(str.trim().toLowerCase());
             p.parse(p.getCore().getListLocations().get(str.trim().toLowerCase()));
+            p.getCore().addCountLocation(str.trim().toLowerCase());
             return false;
         }else
 
         if (s.length==2&&s[0].trim().indexOf(" ")==-1){
-
-            String out = "";
-            String t=p.replaceMatOperators(s[1].trim());
-             System.out.println("parse UNKNOWN : "+str);
-            // p.getCore().getVariables().addVariable(s[0].trim(), "0");
-             p.parseAllUnknownVariables(str);
-           //  t=t.replace(" "+s[0].trim()+" ", " #"+s[0].trim()+"$ ");
-            try {
-                out = p.getIValue(t).get("out").toString();//getValue(s[1].trim()).get("out").toString();
-            } catch (Exception ex) {}
-                out = out.isEmpty() ? s[1].trim() : out;
-            
-                p.getCore().getVariables().addVariable(s[0].trim(), out /*s[1].trim()*/);
-         //       System.out.println("Add UNKNOWN variable: "+s[0]+" = "+out);
+            p.addUnknownVar(s);
+//
+//            String out = "";
+//            String t=s[1].trim();
+//             for (String operation : p.getCore().getMaths().MATH_OPERATIONS.keySet()) {
+//                 if(t.indexOf(operation)>=0){
+//                     out = String.valueOf(p.getCore().getMaths().eval(t));
+//                     break;
+//                 }
+//             }
+//
+//                out = out.isEmpty() ? s[1].trim() : out;
+//                p.getCore().getVariables().addVariable(s[0].trim(),out);
+//         //       System.out.println("Add UNKNOWN variable: "+s[0]+" = "+out);
         }else
             System.out.println("!UNKNOWN! operator : "+str);
+        p.getCore().setGo(true);
         return true;
     }
 

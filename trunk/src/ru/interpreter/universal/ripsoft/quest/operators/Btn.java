@@ -35,9 +35,10 @@ public class Btn implements IOperator {
     public boolean parse(Parser p, String str) {
     //      System.out.println(" Btn parse: "+str);
         str = str.substring(str.indexOf(" ")+1, str.length());
-        String name = str.substring(str.indexOf(",")+1, str.length()).trim();
-        str = str.split(",")[0].trim();
+        String name = p.getString(str.substring(str.indexOf(",")+1, str.length()).trim());
+        str = p.getString(str.split(",")[0].trim());
         p.addOutButton(new Button(name, p, str));
+        p.getCore().setGo(true);
         return true;
       
     }
@@ -54,7 +55,7 @@ public class Btn implements IOperator {
         }
 
         public String getName() {
-            return name;
+            return isPhantom()? name+" !!![PHANTOM]!!!" : name;
         }
 
         public void onClick() {
@@ -69,6 +70,12 @@ public class Btn implements IOperator {
             System.out.println("onClick() "+str);
             p.parse(str);
         }
+
+       public boolean isPhantom() {
+             if(p.getCore().getListLocations().containsKey(str.trim().toLowerCase())) return false;
+             else
+             return !p.getCore().getListLocations().containsKey(p.getString(str).trim().toLowerCase());
+       }
 
     }
 

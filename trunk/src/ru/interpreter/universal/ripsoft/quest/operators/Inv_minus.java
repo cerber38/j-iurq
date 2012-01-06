@@ -45,6 +45,7 @@ public class Inv_minus implements IOperator {
          }
          
          }
+      p.getCore().setGo(true);
       return true;
     }
 
