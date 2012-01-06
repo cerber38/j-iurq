@@ -33,7 +33,7 @@ public class End implements IOperator {
             p.getCore().delLastProc();
             p.parse(ep.n_str,ep.n_stance);
         }
-
+        p.getCore().setGo(true);
         return true;
       }
 

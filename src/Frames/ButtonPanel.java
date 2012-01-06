@@ -26,8 +26,10 @@ public class ButtonPanel extends JPanel
 
 
 
-  public void addButton(int num,String paramBtn){
-    this.add(new Button(num, paramBtn, this.butListener));
+  public void addButton(int num,String paramBtn, boolean enabled){
+    Button b= new Button(num, paramBtn, this.butListener);
+    b.setEnabled(enabled);
+    this.add(b);
     validate();
   }
 

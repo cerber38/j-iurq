@@ -37,6 +37,7 @@ public class Invkill implements IOperator {
 
 
     public boolean parse(Parser p, String str) {
+        p.getCore().setGo(true);
         return true;
     }
 

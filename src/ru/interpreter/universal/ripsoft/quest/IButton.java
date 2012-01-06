@@ -9,5 +9,6 @@ package ru.interpreter.universal.ripsoft.quest;
 public interface IButton {
 
     public String getName();
+    public boolean isPhantom();
     public void onClick();
 }

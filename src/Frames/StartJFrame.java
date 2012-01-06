@@ -183,8 +183,8 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
     }
 
 
-   public void addButton(int num, String paramBtn) {
-    this.buttonPanel.addButton(num,paramBtn);
+   public void addButton(int num, String paramBtn,boolean enabled) {
+    this.buttonPanel.addButton(num,paramBtn,enabled);
   }
 
    public void addText(String paramBtn) {
@@ -209,9 +209,9 @@ public class StartJFrame extends JFrame implements IOut, IOut_cls{
             int i=-1;
             this.buttonPanel.removeAll();
             this.buttonPanel.repaint();
-        for(IButton bt : content.getButtons()){
+        for(IButton bt : content.getAllButtons()){
             i++;
-            addButton(i, bt.getName());
+            addButton(i, bt.getName(),!bt.isPhantom());
         }
         inventoryPanel.refresh(content.getInventory());
         }

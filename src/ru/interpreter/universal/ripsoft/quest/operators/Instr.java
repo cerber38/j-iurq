@@ -41,6 +41,7 @@ public class Instr implements IOperator {
          } catch (Exception ex){}
          p.getCore().getVariables().addVariable(s[0].trim(), value);
      //    System.out.println("Add instr: "+s[0]+" = "+value);
+         p.getCore().setGo(true);
         return true;
     }
 

@@ -37,6 +37,7 @@ public class Print implements IOperator {
         str=p.getString(str);
         p.addOutString(str);
       //  System.out.print(str);
+        p.getCore().setGo(true);
         return true;
     }
 

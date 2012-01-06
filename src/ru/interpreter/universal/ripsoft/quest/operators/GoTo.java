@@ -28,6 +28,7 @@ public class GoTo implements IOperator {
         String s = p.getString(str.substring(str.indexOf(" ")+1, str.length()).trim());
   //      System.out.println("GoTo: "+s);
         p.parse(s);
+        p.getCore().setGo(true);
         return true;
     }
 

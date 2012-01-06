@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.swing.JFileChooser;
+import ru.interpreter.universal.ripsoft.quest.evaluate.Maths;
 import ru.interpreter.universal.ripsoft.quest.operators.BuilderOperators;
 
 /**
@@ -23,6 +24,7 @@ import ru.interpreter.universal.ripsoft.quest.operators.BuilderOperators;
 public class JiURQ {
     private ArrayList<String> listQst = new ArrayList<String>();
     private HashMap<String,Integer> listLocations = new HashMap<String,Integer>();
+    private HashMap<String,Integer> countLocations = new HashMap<String,Integer>();
     private LinkedHashMap<String[],IOperator> operators = new LinkedHashMap<String[],IOperator>();
     public int[] currentQest;
     private Inventory inventory;
@@ -32,15 +34,40 @@ public class JiURQ {
     private IOut out;
     private IOut_cls out_cls;
     private List<ExProc> proc = new ArrayList<ExProc>();
-    private String version = "0.2b";
+    private String version = "0.2-beta";
 //    private int returnLoc=-1;
     private String lastLoc = "";
     private String thisLoc = "";
+    private Maths maths;
+    private boolean go = true;
 //    private boolean read_only = false;
     
+    public JiURQ (){
+     operators=BuilderOperators.build();
+     parser = new Parser(this);
+     inventory = new Inventory();
+     variables = new Variables();
+     activity = new Activity();
+     currentQest = new int[]{0,0};
+     this.out= new IOut() {
+            public void onOutgoing(Outgoing content) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+     this.out_cls=new IOut_cls() {
+            public void cls() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+     maths = new Maths(this);
+    }
 
-
-
+    public void setGo(boolean b){
+        go = b;
+    }
+    public boolean getGo(){
+        return go;
+    }
     public JiURQ (IOut out, IOut_cls out_cls){
      operators=BuilderOperators.build();
      parser = new Parser(this);
@@ -50,7 +77,12 @@ public class JiURQ {
      currentQest = new int[]{0,0};
      this.out=out;
      this.out_cls=out_cls;
+     maths = new Maths(this);
     }
+
+   public Maths getMaths(){
+        return maths;
+   }
     
    public void setLocation(String loc){
         lastLoc = thisLoc;
@@ -64,6 +96,24 @@ public class JiURQ {
    public String getLastLocation(){
         return lastLoc;
    }
+
+   public int getCountLocation(String in){
+       in = in.trim().toLowerCase();
+       if (countLocations.containsKey(in))
+        return countLocations.get(in);
+       else
+       return 0;
+   }
+
+    public void addCountLocation(String in){
+        in = in.trim().toLowerCase();
+       if (countLocations.containsKey(in)){
+           int count = countLocations.get(in)+1;
+           countLocations.put(in, count);
+        } else
+           countLocations.put(in, 1);
+   }
+
 
 //    public static class Qest implements IOut{
 //

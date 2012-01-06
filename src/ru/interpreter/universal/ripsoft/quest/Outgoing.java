@@ -66,6 +66,12 @@ public class Outgoing {
     }
 
     public List<IButton> getButtons (){
+        List<IButton> btn = new ArrayList<IButton>();
+        for(IButton b : buttons) if (!b.isPhantom()) btn.add(b);
+        return btn;
+    }
+    
+    public List<IButton> getAllButtons (){
         return buttons;
     }
 
