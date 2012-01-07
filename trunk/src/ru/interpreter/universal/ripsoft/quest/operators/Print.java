@@ -34,7 +34,7 @@ public class Print implements IOperator {
 
     public boolean parse(Parser p, String str) {
         str=str.substring(str.indexOf(" ")+1, str.length());
-        str=p.getString(str);
+        str=p.getString(str,false);
         p.addOutString(str);
       //  System.out.print(str);
         p.getCore().setGo(true);

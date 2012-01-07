@@ -36,7 +36,7 @@ public class Println implements IOperator {
         if (str.lastIndexOf(" ")<0)str="";
         else{
         str = str.substring(str.indexOf(" ")+1, str.length());
-        str=p.getString(str);
+        str=p.getString(str,false);
           //      System.out.println("getClearString(str) "+str);
         }
         p.addOutString(str+"\n");

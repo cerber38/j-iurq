@@ -25,7 +25,7 @@ public class GoTo implements IOperator {
     }
 
     public boolean parse(Parser p, String str) {
-        String s = p.getString(str.substring(str.indexOf(" ")+1, str.length()).trim());
+        String s = p.getString(str.substring(str.indexOf(" ")+1, str.length()).trim(),true);
   //      System.out.println("GoTo: "+s);
         p.parse(s);
         p.getCore().setGo(true);

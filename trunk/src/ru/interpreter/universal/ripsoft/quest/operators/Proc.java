@@ -33,7 +33,7 @@ public class Proc implements IOperator {
 
     public boolean parse(Parser p, String str) {
         String s = str.substring(str.indexOf(" ")+1, str.length()).trim();
-        s=p.getString(s);
+        s=p.getString(s,true);
         System.out.println("Proc: "+s);
         p.parse(s);
         p.getCore().setGo(true);

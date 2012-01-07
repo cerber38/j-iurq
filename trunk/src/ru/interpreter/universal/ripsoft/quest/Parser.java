@@ -55,58 +55,58 @@ public class Parser {
 //        return out;
 //    }
 
-    public String replaceVariableValue(String in){
-        String out = in;
-       HashMap<String,String> hm = getCore().getVariables().getVariablesHash();
-       for (String v:hm.keySet()){
-            out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
-            out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
-
-            out = out.replace("#"+v+"$", hm.get(v));
-            out = out.replace("#%"+v+"$", hm.get(v));
-       }
-        LinkedHashMap<String,Integer> lhm = getCore().getInventory().getInventoryHash();
-           for (String inv:lhm.keySet()){
-            out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-            out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-
-            out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-            out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-           }
-           int n = out.indexOf("#");
-           int k = out.indexOf("$");
- 
-        while(k>=0&&n>=0){
-         //             System.out.println("n: "+n+" k: "+k+"  "+out.substring(n, k+1));
-         //             System.out.println(out);
-           String op = out.substring(n, k+1);
-           String operator = op.replace("#", "").replace("%", "").replace("$", "");
-           String inv_operator = "";
-           try{
-             inv_operator = operator.substring(4,operator.length());
-           }catch(Exception ex){}
-//        //     System.out.println("inv_operator "+inv_operator);
-//           if (lhm.containsKey(inv_operator)){
-//             out = out.replace(op,String.valueOf(lhm.get(inv_operator)));
-//           }else
-//           if (hm.containsKey(operator)){
-//             out = out.replace(op, hm.get(operator));
-//           }else{
-            out = out.replace(op, " 0 ");
-             if (op.toLowerCase().startsWith("#inv_")||op.toLowerCase().startsWith("#%inv_")){
-               getCore().getInventory().addInv(0,inv_operator);
-          // getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
-             }else
-             getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
-        //   }
-           n = out.indexOf("#");
-           k = out.indexOf("$");
-           if (n==-1)break;
-       //    System.out.println("replaceVariableValue(String in): "+out);
-        }
-
-        return out;
-    }
+//    public String replaceVariableValue(String in){
+//        String out = in;
+//       HashMap<String,String> hm = getCore().getVariables().getVariablesHash();
+//       for (String v:hm.keySet()){
+//            out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
+//            out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
+//
+//            out = out.replace("#"+v+"$", hm.get(v));
+//            out = out.replace("#%"+v+"$", hm.get(v));
+//       }
+//        LinkedHashMap<String,Integer> lhm = getCore().getInventory().getInventoryHash();
+//           for (String inv:lhm.keySet()){
+//            out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+//            out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+//
+//            out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+//            out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+//           }
+//           int n = out.indexOf("#");
+//           int k = out.indexOf("$");
+//
+//        while(k>=0&&n>=0){
+//         //             System.out.println("n: "+n+" k: "+k+"  "+out.substring(n, k+1));
+//         //             System.out.println(out);
+//           String op = out.substring(n, k+1);
+//           String operator = op.replace("#", "").replace("%", "").replace("$", "");
+//           String inv_operator = "";
+//           try{
+//             inv_operator = operator.substring(4,operator.length());
+//           }catch(Exception ex){}
+////        //     System.out.println("inv_operator "+inv_operator);
+////           if (lhm.containsKey(inv_operator)){
+////             out = out.replace(op,String.valueOf(lhm.get(inv_operator)));
+////           }else
+////           if (hm.containsKey(operator)){
+////             out = out.replace(op, hm.get(operator));
+////           }else{
+//            out = out.replace(op, " 0 ");
+//             if (op.toLowerCase().startsWith("#inv_")||op.toLowerCase().startsWith("#%inv_")){
+//               getCore().getInventory().addInv(0,inv_operator);
+//          // getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
+//             }else
+//             getCore().getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
+//        //   }
+//           n = out.indexOf("#");
+//           k = out.indexOf("$");
+//           if (n==-1)break;
+//       //    System.out.println("replaceVariableValue(String in): "+out);
+//        }
+//
+//        return out;
+//    }
 
      public String replaceBadOperators(String in){
           String out = "";
@@ -224,12 +224,81 @@ public class Parser {
 //          return out;
 //    }
 
-    public String getString(String in){
+    public boolean isMath (String symbol){
+//        if(getCore().getMaths().isNum(symbol))return true;
+        if(symbol.equals("0"))return true;
+        if(symbol.equals("1"))return true;
+        if(symbol.equals("2"))return true;
+        if(symbol.equals("3"))return true;
+        if(symbol.equals("4"))return true;
+        if(symbol.equals("5"))return true;
+        if(symbol.equals("6"))return true;
+        if(symbol.equals("7"))return true;
+        if(symbol.equals("8"))return true;
+        if(symbol.equals("9"))return true;
+        if(symbol.equals(" "))return true;
+        if(symbol.equals("."))return true;
+        if(symbol.equals("+"))return true;
+        if(symbol.equals("-"))return true;
+        if(symbol.equals("/"))return true;
+        if(symbol.equals("*"))return true;
+        if(symbol.equals("^"))return true;
+        if(symbol.equals("("))return true;
+        if(symbol.equals(")"))return true;
+        
+        return false;
+    }
 
-        String temp = /*replaceVariableValue(in.trim())*/getCore().getMaths().replaceVariableValue(in);
+     public String getString(String in,boolean сalculate){
+        return сalculate ? getString(getCore().getMaths().replaceVariableValue(getCore().getMaths().parseRnd(in))):
+               getCore().getMaths().replaceVariableValue(getString(getCore().getMaths().parseRnd(in)));
+     }
+
+    public String getString(String in){
+        String temp =getCore().getMaths().parseRnd(in) /*getCore().getMaths().replaceVariableValue(in)*/;
 
      //   temp = replaceBadOperators(temp);
-        temp = getCore().getMaths().parseRnd(temp);
+     //    temp = getCore().getMaths().parseRnd(temp);
+      //   String out = temp;
+             int n = -1;
+             int k = -1;
+             int fromIndex=0;
+             boolean findNext = true;
+        while (findNext) {
+             for (String SYMBOL : getCore().getMaths().MATH_SYMBOLS) {
+                 int t=temp.indexOf(SYMBOL,fromIndex);
+                 k = t;
+                 fromIndex=k;
+                 if(t>=0){
+                   for(int i=t;i>=0; i--){
+                           String s = temp.substring(i, i+1);
+                       if (isMath(s)){
+                           n=i;
+                       }else break;
+                   }
+                   for(int i=t;i<temp.length(); i++){
+                           String s = temp.substring(i, i+1);
+                       if (isMath(s)){
+                           k=i+1;
+                       }else break;
+                   }
+                   if (n>=0){
+                    String r = temp.substring(n, k); 
+                    System.out.println("r "+r);
+                       try{
+                       double res = getCore().getMaths().eval(r);
+                       long mr =Math.round(res);
+                     //  if (res-Math.round(res)==0)
+                       temp = temp.substring(0, n)+((res-mr==0)?mr:res)+temp.substring(k);
+                       fromIndex=k-r.length();
+                       }catch(Exception ex){}
+                   }
+                     break;
+                 }
+                 if (fromIndex==-1||fromIndex==temp.length())findNext=false;
+              }
+         }
+
 
 //        for (String s : m.keySet()){
 //            temp = temp.replace(s, m.get(s));
@@ -237,7 +306,7 @@ public class Parser {
 //        for (String s : l.keySet()){
 //            temp = temp.replace(s, l.get(s));
 //        }
-//        temp = replaceExtraSpaces(temp);
+//      // temp = replaceExtraSpaces(temp);
 //       // parseUnknownVariables(temp);
 //        String out = "";
 //        String t = "";
@@ -250,13 +319,25 @@ public class Parser {
 //
 //            if (m.containsKey(w)||getCore().getMaths().isNum(w)){
 //                t+=w+" ";
-//                if (i+1==words.length)
-//                   out+= getCore().getMaths().eval(t);
-//               System.out.println("getValue(t): "+t+" out= "+out);
+//                if (i+1==words.length){
+//                   try{
+//                   double res = getCore().getMaths().eval(t);
+//                   out+= res;
+//                   }catch(Exception ex){
+//                   out+= t;
+//                   }
+//                }
+//          //     System.out.println("getValue(t): "+t+" out= "+out);
 //            }else
 //                if (!t.isEmpty()){
-//                   out+= getCore().getMaths().eval(t)+" "+w+" ";
-//            System.out.println("getValue(t): "+t+" out= "+out);
+//                   try{
+//                   double res = getCore().getMaths().eval(t);
+//                   out+= res+" "+w+" ";
+//                   }catch(Exception ex){
+//                   out+= t+" "+w+" ";
+//                   }
+//               //    out+= getCore().getMaths().eval(t)+" "+w+" ";
+//          //  System.out.println("getValue(t): "+t+" out= "+out);
 //                t = "";
 //              //  System.out.println("out+= getValue(t);: "+out);
 //                }else
@@ -264,9 +345,7 @@ public class Parser {
 //         }
 //        out = out.trim().replace("= =", "==");
 
-     //   System.out.println("getString(String test): "+test);
- //       System.out.println("getString(String out): "+out);
-
+    //    System.out.println("getString(String out): "+out);
         return temp;
     }
 

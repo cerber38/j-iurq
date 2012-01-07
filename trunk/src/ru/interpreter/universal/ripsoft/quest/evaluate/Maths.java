@@ -23,7 +23,7 @@ import ru.interpreter.universal.ripsoft.quest.JiURQ;
 public class Maths {
 
     public static Map<String, Integer> MATH_OPERATIONS;
-    private static List<String> MATH_SYMBOLS;
+    public static List<String> MATH_SYMBOLS;
     private static List<String> LOGIC_OPERATORS;
 //    private LinkedHashMap<String,String> m= new LinkedHashMap<String,String>();
 //    private static List<String> BOOLEAN_OPERATORS;
@@ -194,24 +194,35 @@ public class Maths {
         public String replaceVariableValue(String in){
                 String out = in;
                HashMap<String,String> hm = jiURQ.getVariables().getVariablesHash();
-               for (String v:hm.keySet()){
-                    out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
-                    out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
-
-                    out = out.replace("#"+v+"$", hm.get(v));
-                    out = out.replace("#%"+v+"$", hm.get(v));
-               }
+//               for (String v:hm.keySet()){
+//                    out = out.replace("#"+v.replace(" ", "_")+"$", hm.get(v));
+//                    out = out.replace("#%"+v.replace(" ", "_")+"$", hm.get(v));
+//
+//                    out = out.replace("#"+v+"$", hm.get(v));
+//                    out = out.replace("#%"+v+"$", hm.get(v));
+//               }
                 LinkedHashMap<String,Integer> lhm = jiURQ.getInventory().getInventoryHash();
-                   for (String inv:lhm.keySet()){
-                    out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-                    out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
-
-                    out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-                    out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
-                   }
-                   int n = out.indexOf("#");
+//                   for (String inv:lhm.keySet()){
+//                    out = out.replace("#inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+//                    out = out.replace("#%inv_"+inv.replace(" ", "_")+"$", String.valueOf(lhm.get(inv)));
+//
+//                    out = out.replace("#inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+//                    out = out.replace("#%inv_"+inv+"$", String.valueOf(lhm.get(inv)));
+//                   }
+//                   int n = out.indexOf("#");
+                   int n = -1;
                    int k = out.indexOf("$");
-                System.out.println("test "+out);
+                   for(int i=k;i>=0; i--){
+//                       System.out.println("substring "+out.substring(i, i+1));
+                       if (out.substring(i, i+1).equals("#")){
+                           n=i;
+                           break;
+                       }
+                           
+                   }
+
+//                System.out.println("n "+n);
+//                System.out.println("k "+k);
                 while(k>=0&&n>=0){
                    String op = out.substring(n, k+1);
                    String operator = op.replace("#", "").replace("%", "").replace("$", "");
@@ -233,8 +244,16 @@ public class Maths {
                          }else
                            out = out.replace(op, " 0 ");
                    //  jiURQ.getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
-                   n = out.indexOf("#");
+                   n = -1;
                    k = out.indexOf("$");
+                   for(int i=k;i>=0; i--){
+                       if (out.substring(i, i+1).equals("#")){
+                           n=i;
+                           break;
+                       }
+                   }
+//                                   System.out.println("n "+n);
+//                System.out.println("k "+k);
                    if (n==-1)break;
                 }
 
