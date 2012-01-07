@@ -36,6 +36,7 @@ public class Variables {
 //                  variables.put(name, value);
 //                }
 //        }else
+        if (value.endsWith(".0"))value=value.substring(0, value.length()-2);
          System.out.println("addVariable: "+name+" = "+value);
         variables.put(name, value);
     }
