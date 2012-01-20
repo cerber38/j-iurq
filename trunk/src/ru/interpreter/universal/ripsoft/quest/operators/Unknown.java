@@ -18,6 +18,7 @@ public class Unknown implements IOperator {
     }
 
     public void parse(Parser p, int n_str, int n_stance, int e_stance) {
+
         String str = p.getStringQest(n_str, n_stance, e_stance);
         int size = p.getStringQest(n_str).length();
         if (parse(p, str)){
@@ -34,9 +35,12 @@ public class Unknown implements IOperator {
         String[] s =str.split("=");
 
         if (p.getCore().getListLocations().containsKey(str.trim().toLowerCase())){
+
            // Location l = p.getCore().getLocation().get(str.trim().toLowerCase());
-            p.parse(p.getCore().getListLocations().get(str.trim().toLowerCase()));
             p.getCore().addCountLocation(str.trim().toLowerCase());
+            p.getCore().setLocation(str.trim().toLowerCase());
+            p.parse(p.getCore().getListLocations().get(str.trim().toLowerCase()));
+
             return false;
         }else
 

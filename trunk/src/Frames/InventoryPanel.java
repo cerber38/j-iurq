@@ -110,7 +110,7 @@ public class InventoryPanel extends JPanel implements ActionListener,  PopupMenu
       public void actionPerformed(ActionEvent actionEvent) {
         int selectedIndex = listInventory.getSelectedIndex();
         sf.getCore().ActivityOnClick(paramHash.get(selectedIndex+"_"+actionEvent.getActionCommand()));
-        System.out.println("Selected: " + actionEvent.getActionCommand());
+//        System.out.println("Selected: " + actionEvent.getActionCommand());
       }
 //    }
 
@@ -128,7 +128,7 @@ public class InventoryPanel extends JPanel implements ActionListener,  PopupMenu
            popupMenu.removeAll();
            int selectedIndex = listInventory.getSelectedIndex();
 
-           System.out.println("listInventory.getSelectedValue() "+selectedIndex);
+//           System.out.println("listInventory.getSelectedValue() "+selectedIndex);
            ArrayList<ActionInventory> s=new ArrayList();
            if (selectedIndex>=0){
                if(selectedIndex==0){

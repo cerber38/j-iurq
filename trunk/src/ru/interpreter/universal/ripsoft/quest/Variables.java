@@ -37,7 +37,7 @@ public class Variables {
 //                }
 //        }else
         if (value.endsWith(".0"))value=value.substring(0, value.length()-2);
-         System.out.println("addVariable: "+name+" = "+value);
+     //    System.out.println("addVariable: "+name+" = "+value);
         variables.put(name, value);
     }
 
@@ -47,6 +47,15 @@ public class Variables {
 
     public String getVariable(String name){
         return variables.containsKey(name) ? variables.get(name) : null;
+    }
+
+    public String getCommon(){
+        String out ="";
+        if(variables.containsKey("common")){
+            String val = variables.get("common");
+            if (!val.equals("0"))out=val;
+        }
+        return out;
     }
   
     /**

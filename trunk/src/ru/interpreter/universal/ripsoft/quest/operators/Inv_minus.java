@@ -32,7 +32,7 @@ public class Inv_minus implements IOperator {
 
 
     public boolean parse(Parser p, String str) {
-      String o = str.substring(str.indexOf("inv-")+4,str.length()).trim();
+      String o = str.substring(4,str.length()).trim();
        if(o.indexOf(",")==-1)
           p.getCore().getInventory().delInv(p.getString(o));
        else{

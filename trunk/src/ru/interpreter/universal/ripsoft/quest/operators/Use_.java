@@ -8,10 +8,10 @@ import ru.interpreter.universal.ripsoft.quest.Parser;
  *
  * @author ~jo-MA-jo~
  */
-public class Print implements IOperator {
-    private String[] ops = {"p", "print"};
+public class Use_ implements IOperator {
+    private String[] ops = {"use_"};
 
-    public Print (){
+    public Use_ (){
     }
 
     public String[] getNames() {
@@ -31,14 +31,15 @@ public class Print implements IOperator {
     }
 
 
-
     public boolean parse(Parser p, String str) {
-        str=str.substring(str.indexOf(" ")+1, str.length());
-        str=p.getString(str,true);
-        p.addOutString(str);
-      //  System.out.print(str);
-        p.getCore().setGo(true);
-        return true;
+      String o = str.substring(0,str.lastIndexOf("_")).trim();
+      String v = str.substring(str.lastIndexOf("=")+1).trim();
+      if (v.equals("1"))p.getCore().getActivity().setHide(o);
+      else p.getCore().getActivity().unHide(o);
+      p.getCore().setGo(true);
+      return true;
     }
+
+
 
 }

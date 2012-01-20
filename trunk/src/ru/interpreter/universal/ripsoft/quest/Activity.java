@@ -27,6 +27,14 @@ public class Activity {
         hide_use = b;
     }
 
+    public void setHide(String name){
+        if(!listHideUse.contains(name))listHideUse.add(name);
+    }
+
+    public void unHide(String name){
+        if(!listHideUse.contains(name))listHideUse.remove(name);
+    }
+
     public boolean isVisible(){
        // boolean b = visible ? inventory.size()>0 : false;
         return hide_use;
