@@ -23,10 +23,10 @@ public class Proc implements IOperator {
         String str = p.getStringQest(n_str, n_stance, e_stance);
         int size = p.getStringQest(n_str).length();
         if (e_stance+1<size)
-                 p.getCore().addProc(new ExProc(n_str, e_stance+1));
+                 p.getCore().addProc(new ExProc(n_str, e_stance+1,p.getCore().getThisLocation()));
             else
                 if (n_str+1<p.getCore().getListQest().size())
-                 p.getCore().addProc(new ExProc(n_str+1, 0));
+                 p.getCore().addProc(new ExProc(n_str+1, 0,p.getCore().getThisLocation()));
         parse(p, str);
 
     }

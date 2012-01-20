@@ -34,7 +34,7 @@ public class JiURQ {
     private IOut out;
     private IOut_cls out_cls;
     private List<ExProc> proc = new ArrayList<ExProc>();
-    private String version = "0.2-beta";
+    private String version = "1.0-beta";
 //    private int returnLoc=-1;
     private String lastLoc = "";
     private String thisLoc = "";
@@ -51,23 +51,18 @@ public class JiURQ {
      currentQest = new int[]{0,0};
      this.out= new IOut() {
             public void onOutgoing(Outgoing content) {
-                throw new UnsupportedOperationException("Not supported yet.");
+//                throw new UnsupportedOperationException("Not supported yet.");
             }
         };
      this.out_cls=new IOut_cls() {
             public void cls() {
-                throw new UnsupportedOperationException("Not supported yet.");
+//                throw new UnsupportedOperationException("Not supported yet.");
             }
         };
      maths = new Maths(this);
     }
 
-    public void setGo(boolean b){
-        go = b;
-    }
-    public boolean getGo(){
-        return go;
-    }
+
     public JiURQ (IOut out, IOut_cls out_cls){
      operators=BuilderOperators.build();
      parser = new Parser(this);
@@ -80,6 +75,12 @@ public class JiURQ {
      maths = new Maths(this);
     }
 
+    public void setGo(boolean b){
+        go = b;
+    }
+    public boolean getGo(){
+        return go;
+    }
    public Maths getMaths(){
         return maths;
    }
@@ -99,8 +100,15 @@ public class JiURQ {
 
    public int getCountLocation(String in){
        in = in.trim().toLowerCase();
-       if (countLocations.containsKey(in))
+       if (countLocations.containsKey(in)){
+    //       System.out.println("getCountLocation "+in+" "+countLocations.get(in));
         return countLocations.get(in);
+    }
+    else
+           if (in.startsWith("count_")&&countLocations.containsKey(in.substring(6))){
+
+               return countLocations.get(in.substring(6));
+           }
        else
        return 0;
    }
@@ -112,27 +120,10 @@ public class JiURQ {
            countLocations.put(in, count);
         } else
            countLocations.put(in, 1);
+
+
    }
 
-
-//    public static class Qest implements IOut{
-//
-//        public void onOutgoing(Outgoing content) {
-//                    String s="";
-//        for(String str : content.getText()){
-//            s+=str;
-//        }
-//            s+="\n----------\n";
-//            int i=0;
-//        for(IButton bt : content.getButtons()){
-//            i++;
-//            s+=i+" | "+bt.getName()+"\n";
-//        }
-//        System.out.println(s);
-//            //throw new UnsupportedOperationException("Not supported yet.");
-//        }
-//
-//    }
 
     public void openDialog(){
         JFileChooser fileChooser = new JFileChooser(".");
@@ -165,17 +156,7 @@ public class JiURQ {
     public String getVersion(){
         return version;
     }
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String[] args) {
-//
-//        JiURQ с =new JiURQ(new Qest());
-//        String fname = args[0];
-//        с.loadQest(fname);
-//        с.strartQest();
-//        // TODO code application logic here
-//    }
+
     public IOut getOut(){
         return out;
     }
@@ -192,13 +173,6 @@ public class JiURQ {
         return variables;
     }
 
-//    public boolean readOnly(){
-//        return read_only;
-//    }
-
-//    public void setReadOnly(boolean b){
-//        read_only = b;
-//    }
     public Activity getActivity(){
         return activity;
     }
@@ -206,7 +180,7 @@ public class JiURQ {
     public void ActivityOnClick(String use){
       //  parser.clearOutgoing();
      //   returnLoc=listLocations.get(thisLoc);
-        System.out.println("ActivityOnClick: "+use);
+//        System.out.println("ActivityOnClick: "+use);
         parser.parse(use);
     }
 
@@ -244,6 +218,7 @@ public class JiURQ {
      activity.clear();
   //   parser = new Parser(this);
      currentQest = new int[]{0,0};
+     countLocations.clear();
 
     }
 
@@ -257,6 +232,8 @@ public class JiURQ {
          getOut_cls().cls();
       //   parser = new Parser(this);
          currentQest = new int[]{0,0};
+         countLocations.clear();
+
          strartQest();
          return true;
         }
@@ -264,19 +241,16 @@ public class JiURQ {
     }
 
     public void addProc(ExProc prc){
- //       System.out.println("addProc: "+prc.l.name);
         proc.add(prc);
     }
 
     public void delLastProc(){
         if (!proc.isEmpty())
             proc.remove(proc.size()-1);
- //               System.out.println("delLastProc ");
     }
 
     public ExProc getLastProc(){
         if (!proc.isEmpty()){
- //           System.out.println("getLastProc() "+proc.get(proc.size()-1).l.name);
             return proc.get(proc.size()-1);
         } else
         return null;
@@ -289,15 +263,11 @@ public class JiURQ {
     public void loadQest(String fname) {
         try {
            int i=-1;
-
-            String nameLocation ="";
-//
-//            String[]content =getQest(fname).split("<BR>");
-//
-//              for (String str :content){
+           String nameLocation ="";
            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
             while (r.ready()){
              String str = r.readLine().replace("#/$", "\n").trim();
+               str = str.replace("#$", "\n").trim();
 
             // if (str.startsWith("_")) str ="p "+str.substring(str.indexOf("_")+1, str.length());
               if(!str.trim().toLowerCase().startsWith("if")){
@@ -306,7 +276,8 @@ public class JiURQ {
                    // System.out.println(s);
                     if (s.startsWith(";"))continue;
                     if (s.startsWith(":")){
-                        nameLocation = s.substring(1,s.length()).toLowerCase();
+                        int k = s.indexOf(";");
+                        nameLocation = s.substring(1,(k ==-1)?s.length():k).toLowerCase();
                         listLocations.put(nameLocation, i+1);
                         if (s.toLowerCase().startsWith(":use_")) activity.addUse(s.substring(1,s.length()));
                     }else
@@ -316,21 +287,16 @@ public class JiURQ {
                             listQst.add(i,str);
                         }else{
                           i++;
-                          listQst.add(i,s);
+                          int k = s.indexOf(";");
+                          listQst.add(i,s.substring(0,(k ==-1)?s.length():k));
                         }
                     }
                 }
               }else{
-//                  if (str.startsWith(";"))continue;
-//                  if (str.startsWith(":")){
-//                        nameLocation = str.substring(1,str.length()).toLowerCase();
-//                        listLocations.put(nameLocation, i+1);
-//                        if (str.toLowerCase().startsWith(":use_")) activity.addUse(str.substring(1,str.length()));
-//                  }else
                     if (!str.isEmpty()&&!str.equals(" ")&&!str.equals("\n")/*&&!s.equalsIgnoreCase("end")*/){
                         i++;
-                        listQst.add(i,str);
-              //          }
+                        int k = str.indexOf(";");
+                        listQst.add(i,str.substring(0,(k ==-1)?str.length():k));
                     }
               }
             }
@@ -341,30 +307,6 @@ public class JiURQ {
         }
     }
 
-//    /**
-//     * Загружает квест из файла
-//     * @param fname
-//     */
-//    public String getQest(String fname) {
-//         String out ="";
-//        try {
-//            BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "windows-1251"));
-//
-//            while (r.ready()){
-//              String str = r.readLine().trim();
-//              if (str.startsWith("_"))
-//                  out +=str.substring(str.indexOf("_")+1, str.length());
-//              else
-//                  out +="\n<BR>"+str;
-//              out = out.replace("#/$", "\n");
-//            }
-//      //      System.out.println(out);
-//             r.close();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//             return out;
-//    }
 
 
 }

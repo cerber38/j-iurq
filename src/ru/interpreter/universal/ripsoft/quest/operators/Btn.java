@@ -60,6 +60,12 @@ public class Btn implements IOperator {
 
         public void onClick() {
             p.clearOutgoing();
+            String commonPref = p.getCore().getVariables().getCommon();
+            if (p.getCore().getListLocations().containsKey("common"+commonPref))
+                p.parse("common"+commonPref);
+            else
+            if (p.getCore().getListLocations().containsKey("common_"+commonPref))
+                p.parse("common_"+commonPref);
 //            String s = null;
 //            try {
 //                s = p.getValue(str).get("out").toString();
@@ -67,7 +73,7 @@ public class Btn implements IOperator {
 //            str = s.isEmpty() ? str : s;
             str =p.getCore().getVariables().getVariablesHash().containsKey(str.trim()) ||
                     p.getCore().getListLocations().containsKey(str.trim())/*p.isNum(str)*/? str: p.getString(str);
-            System.out.println("onClick() "+str);
+           System.out.println("onClick() "+str);
             p.parse(str);
         }
 

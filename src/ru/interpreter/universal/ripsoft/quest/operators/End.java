@@ -26,10 +26,14 @@ public class End implements IOperator {
 
     public boolean parse(Parser p, String str) {
         if (p.getCore().getLastProc()==null){
+            if (!p.getCore().getThisLocation().equals("common")){
             Outgoing o = p.getOutgoing();
+            o.onOutgoing();
             p.getCore().getOut().onOutgoing(o);
+            }
         }else{
             ExProc ep = p.getCore().getLastProc();
+            p.getCore().setLocation(ep.name_location);
             p.getCore().delLastProc();
             p.parse(ep.n_str,ep.n_stance);
         }

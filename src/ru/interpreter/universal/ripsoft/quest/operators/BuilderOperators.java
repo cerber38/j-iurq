@@ -42,6 +42,9 @@ public class BuilderOperators  {
                Instr instr = new Instr();
                 op.put(instr.getNames(), instr);
 
+               Use_ use_ = new Use_();
+                op.put(use_.getNames(), use_);
+
                GoTo goTo = new GoTo();
                 op.put(goTo.getNames(), goTo);
 

@@ -71,7 +71,7 @@ public class Inventory {
            }
            else
                inventory.put(name, new_count);
-               System.out.println("addInv: "+name+" = "+count);
+//               System.out.println("addInv: "+name+" = "+count);
      }
 
     /**
@@ -79,7 +79,7 @@ public class Inventory {
      * @param name
      */
     public void addInv(String name){
-        System.out.println("addInv: "+name+" = "+1);
+//        System.out.println("addInv: "+name+" = "+1);
            addInv(1, name);
     }
 

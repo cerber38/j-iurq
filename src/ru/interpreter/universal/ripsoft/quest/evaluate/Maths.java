@@ -87,6 +87,7 @@ public class Maths {
     }
 
     public boolean evalBoolean(String expression){
+//        System.out.println("getBoolean "+expression);
         StringTokenizer tokenizer = new StringTokenizer(expression.trim(), " ");
         int maxtoken = tokenizer.countTokens();
         String bool ="";
@@ -96,23 +97,23 @@ public class Maths {
             i++;
             String token = tokenizer.nextToken();
             if (token.equalsIgnoreCase("and")||token.equals("&&")||token.equals("&")){
-               boolean b = getBoolean(bool.trim());
+               boolean b = getBoolean(bool.trim().replace("(", "").replace(")", ""));
                bool ="";
                tmp+= b==true ? " true and":" false and";
             }else
             if (token.equalsIgnoreCase("or")||token.equalsIgnoreCase("||")){
-               boolean b = getBoolean(bool.trim());
+               boolean b = getBoolean(bool.trim().replace("(", "").replace(")", ""));
                bool ="";
                tmp+= b==true ? " true or":" false or";
             }else{
                bool +=" "+token;
             }
             if (i==maxtoken){
-               boolean b = getBoolean(bool.trim());
+               boolean b = getBoolean(bool.trim().replace("(", "").replace(")", ""));
                tmp+= b==true ? " true":" false";
             }
          }
-        System.out.println("temp "+tmp.trim());
+      //  System.out.println("temp "+tmp.trim());
         tmp = tmp.trim().replace("and true or", "and (true or");
         tmp = tmp.replace("and false or", "and (false or");
         tmp = tmp.replace("or true and", "or true) and");
@@ -134,7 +135,7 @@ public class Maths {
                left = tmp.indexOf("(");
                right = tmp.indexOf(")");
          }
-           System.out.println("temp "+tmp.trim());
+//           System.out.println("temp "+tmp.trim());
 
         tokenizer = new StringTokenizer(tmp.trim(), " ");
             int tr = 0;
@@ -157,7 +158,7 @@ public class Maths {
 
 
     private boolean getBoolean(String expression){
-        System.out.println("getBoolean "+expression);
+     //   System.out.println("getBoolean "+expression);
         expression = expression.trim();
         boolean not = expression.startsWith("not");
         if (not)expression=expression.substring(3, expression.length());
@@ -166,6 +167,8 @@ public class Maths {
                 if (i >= 0){
                 Double calLeft = calculate(adaptToRPN (expression.substring(0,i).trim()), 2);
                 Double calRight = calculate(adaptToRPN (expression.substring(i+operator.length(),expression.length()).trim()), 2);
+//                    System.out.println("calLeft "+expression.substring(0,i).trim()+"    "+calLeft);
+//                    System.out.println("calRight "+expression.substring(i+operator.length(),expression.length()).trim()+"    "+calRight);
                     if(operator.equals("<=")){
                         return not==true ? !(calLeft <= calRight) : calLeft <= calRight;
                     }
@@ -243,6 +246,7 @@ public class Maths {
                            out = out.substring(0, n)+hm.get(operator)+out.substring(k+1, out.length());
                          }else
                            out = out.replace(op, " 0 ");
+                           
                    //  jiURQ.getVariables().addVariable(op.replace("#", "").replace("%", "").replace("$", ""), "0");
                    n = -1;
                    k = out.indexOf("$");
@@ -261,6 +265,7 @@ public class Maths {
           }
 
        public String parseRnd(String in){
+
             String out = in;
          try{
             Random r = new Random();
@@ -269,21 +274,26 @@ public class Maths {
             while ((i=out.indexOf("rnd"))>=0){
                 int ii=i+3;
                 String rnd = "";
-                while (isNum(String.valueOf(out.charAt(ii)))){
+
+                while (ii<out.length()&&isNum(String.valueOf(out.charAt(ii)))){
+                    System.out.println(out.charAt(ii));
                     rnd+=String.valueOf(out.charAt(ii));
-                    ii=ii+1;
+                    ii++;
+                    if(ii==out.length())break;
                 }
-                if (!rnd.trim().isEmpty())
+                if (!rnd.trim().isEmpty()){
                     out = out.substring(0, i)+String.valueOf(r.nextInt(Integer.parseInt(rnd)))+out.substring(i+rnd.length()+3, out.length());
-                else
+                } else
                     out = out.substring(0, i)+String.valueOf(formatDouble(r.nextDouble(),2))+out.substring(i+3, out.length());
+                
             }
            }catch(Exception ex){ return in;}
+
             return out;
         }
 
      private String getVariable(String var){
-         System.out.println("getVariable "+var);
+//         System.out.println("getVariable "+var);
             var = var.trim();
             String operator = var.replace("#", "").replace("%", "").replace("$", "");
             HashMap<String,String> hm = jiURQ.getVariables().getVariablesHash();
@@ -295,7 +305,6 @@ public class Maths {
             if (operator.length()>3&&lhm.containsKey(operator.substring(4, operator.length())))
                  return String.valueOf(lhm.get(operator.substring(4, operator.length())));
        //   System.out.println("getVariable "+var+" =0");
-
          return String.valueOf(jiURQ.getCountLocation(var));
 
      }
@@ -322,8 +331,8 @@ public class Maths {
         for(int i = 0; i<words.length; i++){
             String w = words[i];
             if (w.isEmpty()) continue;
-            if (!MATH_SYMBOLS.contains(w)&&!isNum(w)){
-                System.out.println("w "+w);
+            if (!MATH_SYMBOLS.contains(w)&&!isNum(w)&&!w.startsWith(".")){
+//                System.out.println("w "+w);
               t+=w+" ";
                 if (i+1==words.length){
                 out=out.replace(t.trim(), getVariable(t));

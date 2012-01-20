@@ -64,7 +64,7 @@ public class If_then_else implements IOperator {
     }
 
         public void parse() {
-            System.out.println("!!!!parse wait");
+//            System.out.println("!!!!parse wait");
         int size = p.getStringQest(n_str).length();
             if (e_stance+1<size)
                  p.parse(n_str, e_stance+1);
@@ -164,57 +164,10 @@ public class If_then_else implements IOperator {
         return p.getCore().getMaths().evalBoolean(condition);
     }
 
-//    public boolean getBoolean2(String condition, Parser p){
-//        boolean b =false;
-////        String temp = condition;
-//        boolean not = condition.toLowerCase().trim().startsWith("not");
-//        try{
-//          condition = p.parseAllUnknownVariables(p.getString(condition.trim()));
-//          condition = condition.replaceAll("not", "").trim();
-//           if (condition.indexOf("true")==-1&&condition.indexOf("false")==-1&&
-//                condition.indexOf("*")==-1&&condition.indexOf("/")==-1&&
-//                condition.indexOf("+")==-1&&condition.indexOf("-")==-1&&
-//                condition.indexOf("<")==-1&&condition.indexOf("<=")==-1&&
-//                condition.indexOf(">=")==-1&&condition.indexOf(">")==-1&&
-//                condition.indexOf("=")==-1){
-//               if(!p.getCore().getVariables().getVariablesHash().containsKey(condition)&&
-//                   p.getCore().getInventory().getInventoryHash().containsKey(condition.replace("inv_", ""))){
-//                   if (condition.startsWith("inv_"))
-//                       p.getCore().getInventory().addInv(0, condition.replaceAll("inv_", ""));
-//                   else
-//                       p.getCore().getVariables().addVariable(condition, "0");
-//               }
-//
-//
-//               condition = condition+">0";
-//            }
-////          HashMap<String,String> hm = p.getCore().getVariables().getVariablesHash();
-////          LinkedHashMap<String,Integer> lhm = p.getCore().getInventory().getInventoryHash();
-////
-////            for (String v:hm.keySet()){
-////                String s =v.replace(" ", "_");
-////                condition = condition.replace(v, s);
-////            }
-////
-////           for (String inv:lhm.keySet()){
-////                  String s ="inv_"+inv.replace(" ", "_");
-////                  condition = condition.replace("inv_"+inv, s);
-////           }
-//
-//            b = (Boolean)p.getIValue(condition).get("out");
-//  //          System.out.println(b);
-//        } catch (Exception ex) {
-//           //     ex.printStackTrace();
-////        	System.err.println("Ошибка обработки условия: " + ex.getMessage());
-//        }
-//        if(not)b = !b;
-// //       System.out.println("getBoolean2 "+condition+" "+b);
-//        return b ;
-//    }
 
     public void action (Parser p,String str) {
         String s = str.trim();
-        System.out.println("action: "+s);
+//        System.out.println("action: "+s);
         p.parse(s);
     }
 

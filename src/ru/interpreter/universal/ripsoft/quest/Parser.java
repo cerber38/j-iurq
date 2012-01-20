@@ -176,7 +176,7 @@ public class Parser {
 //    }
     public void addUnknownVar(String[] s){
             String out = "";
-            String t=s[1].trim();
+            String t=getCore().getMaths().parseRnd(s[1].trim());
              for (String operation : getCore().getMaths().MATH_OPERATIONS.keySet()) {
                  if(t.indexOf(operation)>=0){
                      out = String.valueOf(getCore().getMaths().eval(t));
@@ -195,14 +195,15 @@ public class Parser {
                  }
                  }catch(Exception ex){}
                  if (hm.containsKey(t)){
-                  getCore().getVariables().addVariable(s[0].trim(), hm.get(t));
+                     
+                  getCore().getVariables().addVariable(s[0].trim().equalsIgnoreCase("common")?s[0].trim().toLowerCase():s[0].trim(), hm.get(t));
                //   System.out.println("AddNEWVariable: "+s[0]);
                   return;
                  }
 
              }
 
-                out = out.isEmpty() ? s[1].trim() : out;
+                out = out.isEmpty() ? t : out;
 
                    if (s[0].toLowerCase().startsWith("inv_")){
                         getCore().getInventory().addInv(Integer.valueOf(out), s[0].substring(4, s[0].length()));
@@ -250,26 +251,29 @@ public class Parser {
     }
 
      public String getString(String in,boolean сalculate){
-        return сalculate ? getString(getCore().getMaths().replaceVariableValue(getCore().getMaths().parseRnd(in))):
-               getCore().getMaths().replaceVariableValue(getString(getCore().getMaths().parseRnd(in)));
+        return сalculate ? getString(getCore().getMaths().replaceVariableValue(in)):
+               getCore().getMaths().replaceVariableValue(getString(in));
      }
 
     public String getString(String in){
         String temp =getCore().getMaths().parseRnd(in) /*getCore().getMaths().replaceVariableValue(in)*/;
-
+      //  System.out.println(" getString: "+in);
      //   temp = replaceBadOperators(temp);
      //    temp = getCore().getMaths().parseRnd(temp);
       //   String out = temp;
              int n = -1;
              int k = -1;
              int fromIndex=0;
+             int index=0;
              boolean findNext = true;
         while (findNext) {
+                  fromIndex=temp.length();
              for (String SYMBOL : getCore().getMaths().MATH_SYMBOLS) {
-                 int t=temp.indexOf(SYMBOL,fromIndex);
+                 int t=temp.indexOf(SYMBOL,index);
                  k = t;
-                 fromIndex=k;
-                 if(t>=0){
+                   if(t>=0){
+                      // fromIndex=t;
+                          // index=t;
                    for(int i=t;i>=0; i--){
                            String s = temp.substring(i, i+1);
                        if (isMath(s)){
@@ -280,23 +284,36 @@ public class Parser {
                            String s = temp.substring(i, i+1);
                        if (isMath(s)){
                            k=i+1;
+                        //   index=k;
                        }else break;
                    }
                    if (n>=0){
-                    String r = temp.substring(n, k); 
-                    System.out.println("r "+r);
+                    String r = temp.substring(n, k);
                        try{
+                       if(r.startsWith("."))throw new Exception("Expression isn't specified.");
+                       if(r.endsWith("-"))throw new Exception("Expression isn't specified.");
+                       if(r.endsWith(":"))throw new Exception("Expression isn't specified.");
+                       if(r.endsWith("/"))throw new Exception("Expression isn't specified.");
+                       if(r.endsWith("+"))throw new Exception("Expression isn't specified.");
+//                       System.out.println("r "+r);
                        double res = getCore().getMaths().eval(r);
-                       long mr =Math.round(res);
-                     //  if (res-Math.round(res)==0)
-                       temp = temp.substring(0, n)+((res-mr==0)?mr:res)+temp.substring(k);
-                       fromIndex=k-r.length();
+                       String mr = String.valueOf(res);
+                      //  if (res-Math.round(res)==0)
+                     //  index=temp.substring(k).length();
+                       temp = temp.substring(0, n)+(mr.endsWith(".0")?mr.substring(0, mr.length()-2):res)+temp.substring(k);
+//                       System.out.println(String.valueOf(res)+" temp "+temp);
+                     //  index=temp.length()-index;
                        }catch(Exception ex){}
+                       index = k;
+                      // }
+
                    }
-                     break;
+                     fromIndex=k;
+                  //   break;
                  }
-                 if (fromIndex==-1||fromIndex==temp.length())findNext=false;
-              }
+               }
+           //  System.out.println("fromIndex "+fromIndex+"   "+temp.length());
+             if (fromIndex==temp.length())findNext=false;
          }
 
 
@@ -421,9 +438,11 @@ public class Parser {
     }
 
     public void parse (String str){
-         for (String[]o: c.getOperators().keySet()){
-             if (operTest(o,str)){
-                 c.getOperators().get(o).parse(this,str);
+    //     System.out.println("parse (String str) "+str);
+         for (String[]op: c.getOperators().keySet()){
+           // System.out.println("parse (String str) "+str);
+             if (operTest(op,str)){
+                 c.getOperators().get(op).parse(this,str);
                  break;
              }
 
@@ -474,6 +493,7 @@ public class Parser {
 //             }
            if(str.trim().toLowerCase().split(" ")[0].equalsIgnoreCase(s))return true;
            if(str.trim().toLowerCase().startsWith("inv_")&&str.trim().toLowerCase().startsWith(s))return true;
+           if(str.trim().toLowerCase().startsWith("use_")&&str.trim().toLowerCase().startsWith(s)&&str.indexOf("=")!=-1)return true;
             }
         return false;
     }

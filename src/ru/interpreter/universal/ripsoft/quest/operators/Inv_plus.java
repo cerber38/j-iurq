@@ -32,7 +32,7 @@ public class Inv_plus implements IOperator {
 
 
     public boolean parse(Parser p, String str) {
-      String o = str.substring(str.indexOf("inv+")+4,str.length()).trim();
+      String o = str.trim().substring(4,str.length()).trim();
        if(o.indexOf(",")==-1)
           p.getCore().getInventory().addInv(p.getString(o));
        else{
@@ -41,6 +41,7 @@ public class Inv_plus implements IOperator {
               int count = Integer.parseInt(p.getString(o.split(",")[0].trim()));
               p.getCore().getInventory().addInv(count, o.split(",")[1].trim());
          }catch (Exception ex){
+             ex.printStackTrace();
            System.out.println("!!!Ошибка добавления в инвентарь: "+str);
          }
 
