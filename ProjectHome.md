@@ -1,0 +1,1 @@
+Java interpreter Universal Ripsoft Quest (JiURQ)
